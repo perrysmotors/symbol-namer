@@ -2,7 +2,7 @@
   "name": "symbol-namer",
   "description": "Rename symbol instances to their override text values",
   "author": "Giles Perry <giles@gilesperry.info> (http://gilesperry.info/)",
-  "version": "0.1.2-0",
+  "version": "1.0.0",
   "engines": {
     "sketch": ">=3.0"
   },
