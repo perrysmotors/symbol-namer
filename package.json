@@ -1,0 +1,31 @@
+{
+  "name": "symbol-namer",
+  "description": "Rename symbol instances to their override text values",
+  "author": "Giles Perry <giles@gilesperry.info> (http://gilesperry.info/)",
+  "version": "0.1.0",
+  "engines": {
+    "sketch": ">=3.0"
+  },
+  "skpm": {
+    "name": "Symbol Namer",
+    "manifest": "src/manifest.json",
+    "main": "symbol-namer.sketchplugin",
+    "assets": [
+      "assets/**/*"
+    ]
+  },
+  "scripts": {
+    "build": "skpm-build",
+    "watch": "skpm-build --watch",
+    "start": "skpm-build --watch --run",
+    "postinstall": "npm run build && skpm-link"
+  },
+  "devDependencies": {
+    "@skpm/builder": "^0.5.11"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/perrysmotors/symbol-namer.git"
+  },
+  "license": "MIT"
+}

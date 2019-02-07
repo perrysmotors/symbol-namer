@@ -1,0 +1,19 @@
+{
+  "compatibleVersion": 53,
+  "bundleVersion": 1,
+  "icon": "icon.png",
+  "commands": [
+    {
+      "name": "Rename Symbols",
+      "identifier": "rename-symbols",
+      "script": "./symbol-namer.js",
+      "handler": "onRename"
+    }
+  ],
+  "menu": {
+    "title": "Symbol Namer",
+    "items": [
+      "rename-symbols"
+    ]
+  }
+}
