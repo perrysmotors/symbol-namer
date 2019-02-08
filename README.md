@@ -3,9 +3,15 @@
 
 A Sketch plugin to rename symbol instances to their override text values.
 
+![symbol namer](https://user-images.githubusercontent.com/12557727/52470294-a5928b00-2b85-11e9-9a28-3e2321c75c72.gif)
+
 ## Features
 - The name is based on the value of the text override that appears first in the Inspector panel
 - Symbol instances without text overrides are ignored
+
+## How it works
+
+When a symbol has more than one text override, **Symbol Namer** assumes that you have set your symbol up nicely, so that its primary override is listed first in Sketch's Inspector panel. You can control this order by arranging the symbol master's layers in the desired order.
 
 ## Installation
 
