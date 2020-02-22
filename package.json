@@ -10,7 +10,6 @@
     "name": "Symbol Namer",
     "manifest": "src/manifest.json",
     "identifier": "com.gilesperry.symbol-namer",
-    "appcast": "https://api.sketchpacks.com/v1/plugins/com.gilesperry.symbol-namer/appcast",
     "main": "symbol-namer.sketchplugin",
     "assets": [
       "assets/**/*"
