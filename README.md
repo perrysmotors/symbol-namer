@@ -15,9 +15,7 @@ When a symbol has more than one text override, **Symbol Namer** assumes that you
 
 ## Installation
 
-_Requires Sketch 53+_
-
-* [Download](https://github.com/perrysmotors/symbol-namer/releases/latest) the latest release of the plugin
+* [Download](../../releases/latest/download/symbol-namer.sketchplugin.zip) the latest release of the plugin
 * Un-zip
 * Double-click on `symbol-namer.sketchplugin`
 
