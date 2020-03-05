@@ -1,25 +1,25 @@
-var UI = require("sketch/ui"),
-    DOM = require("sketch/dom")
+import UI from "sketch/ui"
+import { getSelectedDocument } from "sketch/dom"
 
-export function onRename(context) {
-    var document = DOM.getSelectedDocument()
+export function onRename() {
+    const document = getSelectedDocument()
 
-    var selectedLayers = document.selectedLayers
+    const selectedLayers = document.selectedLayers
         .map(layer => layer)
         .filter(layer => layer.type === "SymbolInstance")
-    var selectedCount = selectedLayers.length
+    const selectedCount = selectedLayers.length
 
     if (selectedCount === 0) {
         UI.message("Select one or more symbols")
     } else {
         let renamedCount = 0
         selectedLayers.forEach(layer => {
-            var overrides = layer.overrides.filter(
+            const overrides = layer.overrides.filter(
                 override =>
                     override.property === "stringValue" &&
                     override.sketchObject.isEditable()
             )
-            var overrideCount = overrides.length
+            const overrideCount = overrides.length
 
             if (overrideCount > 0) {
                 layer.name = overrides[0].value
