@@ -7,9 +7,8 @@ export function onRename() {
     const selectedLayers = document.selectedLayers
         .map(layer => layer)
         .filter(layer => layer.type === "SymbolInstance")
-    const selectedCount = selectedLayers.length
 
-    if (selectedCount === 0) {
+    if (selectedLayers.length === 0) {
         UI.message("Select one or more symbols")
     } else {
         let renamedCount = 0
@@ -19,9 +18,8 @@ export function onRename() {
                     override.property === "stringValue" &&
                     override.sketchObject.isEditable()
             )
-            const overrideCount = overrides.length
 
-            if (overrideCount > 0) {
+            if (overrides.length > 0) {
                 layer.name = overrides[0].value
                 renamedCount++
             }
