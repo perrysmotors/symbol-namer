@@ -16,7 +16,7 @@ export function onRename() {
             const overrides = layer.overrides.filter(
                 override =>
                     override.property === "stringValue" &&
-                    override.sketchObject.isEditable()
+                    override.editable
             )
 
             if (overrides.length > 0) {
