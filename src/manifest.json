@@ -4,16 +4,53 @@
   "icon": "icon.png",
   "commands": [
     {
-      "name": "Rename Symbols",
-      "identifier": "rename-symbols",
+      "name": "Select All Instances on Page",
+      "identifier": "selectOnPage",
       "script": "./symbol-namer.js",
-      "handler": "onRename"
+      "handler": "onSelectOnPage"
+    },
+    {
+      "name": "Rename Selection Using Override Text",
+      "identifier": "renameToOverride",
+      "script": "./symbol-namer.js",
+      "handler": "onRenameToOverride"
+    },
+    {
+      "name": "Rename Selection Using Default",
+      "identifier": "resetSelection",
+      "script": "./symbol-namer.js",
+      "handler": "onResetSelection"
+    },
+    {
+      "name": "Rename All Instances Using Default",
+      "identifier": "resetAll",
+      "script": "./symbol-namer.js",
+      "handler": "onResetAll"
+    },
+    {
+      "name": "Set Default Symbol Name",
+      "identifier": "setDefault",
+      "script": "./symbol-namer.js",
+      "handler": "onSetDefault"
+    },
+    {
+      "name": "Clear Default Symbol Names",
+      "identifier": "clearDefaults",
+      "script": "./symbol-namer.js",
+      "handler": "onClearDefaults"
     }
   ],
   "menu": {
     "title": "Symbol Namer",
     "items": [
-      "rename-symbols"
+      "selectOnPage",
+      "-",
+      "renameToOverride",
+      "resetSelection",
+      "resetAll",
+      "-",
+      "setDefault",
+      "clearDefaults"
     ]
   }
 }
