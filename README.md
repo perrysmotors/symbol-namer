@@ -10,7 +10,7 @@ or
 
 - Set and use a default name
 
-## How Symbol Name works with text overrides
+## How Symbol Namer works with text overrides
 
 ![symbol namer](https://user-images.githubusercontent.com/12557727/52470294-a5928b00-2b85-11e9-9a28-3e2321c75c72.gif)
 
