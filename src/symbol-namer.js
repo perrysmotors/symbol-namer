@@ -139,39 +139,17 @@ export function onClearDefaults() {
     if (masters.length === 0) {
         UI.message("Select one or more symbols")
     } else {
-        // masters has one item for very instance so the same master may appear more than once.
-        // It woulld be nice to fix this.
-        masters.forEach(master =>
-            Settings.setLayerSettingForKey(master, settingKey, undefined)
-        )
-        UI.message("Defaults cleared")
+        const uniqueIDs = []
+        masters.forEach(master => {
+            if (!uniqueIDs.includes(master.id)) {
+                Settings.setLayerSettingForKey(master, settingKey, undefined)
+                uniqueIDs.push(master.id)
+            }
+        })
+        const s = uniqueIDs.length === 1 ? "" : "s"
+        UI.message(`${uniqueIDs.length} symbol master${s} reset`)
     }
 }
-
-// export function onClearDefaults() {
-//     const document = getSelectedDocument()
-
-//     const masterIDs = document.selectedLayers.layers
-//         .filter(
-//             layer =>
-//                 layer.type === "SymbolMaster" || layer.type === "SymbolInstance"
-//         )
-//         .map(layer =>
-//             layer.type === "SymbolMaster" ? layer.id : layer.master.id
-//         )
-
-//     if (masterIDs.length === 0) {
-//         UI.message("Select one or more symbols")
-//     } else {
-//         const uniqueMasterIDs = new Set(masterIDs)
-//         uniqueMasterIDs.forEach(id => {
-//             const master = document.getLayerWithID(id)
-//             Settings.setLayerSettingForKey(master, settingKey, undefined)
-//         })
-//         const s = uniqueMasterIDs.size === 1 ? "" : "s"
-//         UI.message(`${uniqueMasterIDs.size} symbol master${s} reset`)
-//     }
-// }
 
 function getMasterFromSelection(layers) {
     if (layers.length === 1) {
