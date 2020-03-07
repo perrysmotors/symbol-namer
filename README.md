@@ -17,7 +17,7 @@ A Sketch plugin to help you rename symbol instances.
 When a symbol has more than one text override, **Symbol Namer** assumes that you have set your symbol up nicely, so that its primary override is listed first in Sketch's Inspector panel. You can control this order by arranging the symbol master's layers in the desired order.
 
 ## How defaults work
-When you create a symbol you might give it a name like `Components/Album/Card/Default` to keep your symbols organised. So this is the name that Sketch uses when you insert the symbol. But in the Layers Panel `Album Card` might be better. Symbol Namer let's you set this as a default, making it quick and easy to reapply the saved name whenever needed. If you don't define a default then symbols will be renamed to match their master.
+When you create a symbol you might give it a name like `Components/Album/Card/Default` to keep your symbols organised. So this is the name that Sketch uses when you insert the symbol. But in the Layers Panel `Album Card` might be better. Symbol Namer lets you set this as a default, making it quick and easy to reapply the saved name whenever needed. If you don't define a default then symbols will be renamed to match their master.
 
 **Default names can be set on Library symbols:**
 
