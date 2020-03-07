@@ -5,10 +5,7 @@ A Sketch plugin to help you rename symbol instances.
 
 ## Features
 - Rename symbol instances to their override text values
-
-or
-
-- Set and use a default name
+- ***New in Version 2*** – Set and use a default name
 
 ## How Symbol Namer works with text overrides
 
