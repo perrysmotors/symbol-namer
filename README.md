@@ -7,7 +7,7 @@ A Sketch plugin to help you rename symbol instances.
 - Rename symbol instances to their override text values
 - ***New in Version 2*** – Set and use a default name
 
-![symbol namer](https://user-images.githubusercontent.com/12557727/76146646-68504380-608c-11ea-8114-fe2ef9bdcdc8.gif)
+![symbol namer](https://user-images.githubusercontent.com/12557727/76146764-7e123880-608d-11ea-8022-4f7a5a7dfdeb.gif)
 
 ## How Symbol Namer works with text overrides
 
