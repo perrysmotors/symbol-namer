@@ -3,6 +3,7 @@ import Settings from "sketch/settings"
 import { getSelectedDocument } from "sketch/dom"
 
 const settingKey = "com.gilesperry.symbol-namer.name"
+const templateKey = "com.gilesperry.symbol-namer.template"
 
 export function onSelectOnPage() {
     const document = getSelectedDocument()
@@ -168,4 +169,81 @@ function getMasterFromSelection(layers) {
 function getDefaultName(master) {
     const defaultName = Settings.layerSettingForKey(master, settingKey)
     return defaultName === undefined ? master.name : defaultName
+}
+
+export function onSetTemplate() {
+    let template = Settings.settingForKey(templateKey)
+    if (template === undefined) {
+        template = "%-1"
+    }
+    UI.getInputFromUser(
+        "Enter a template:",
+        {
+            initialValue: template,
+        },
+        (err, value) => {
+            if (err) {
+                // most likely the user canceled the input
+                return
+            } else {
+                if (value === "") {
+                    UI.message("⚠️ You can't leave it blank")
+                } else {
+                    Settings.setSettingForKey(templateKey, value)
+                    UI.message(`Template set to "${value}"`)
+                }
+            }
+        }
+    )
+}
+
+export function onRenameToTemplate() {
+    const document = getSelectedDocument()
+
+    const instances = document.selectedLayers.layers.filter(
+        layer => layer.type === "SymbolInstance"
+    )
+
+    if (instances.length === 0) {
+        UI.message("Select one or more symbols")
+    } else {
+        instances.forEach(
+            layer => (layer.name = getNameFromTemplate(layer.master.name))
+        )
+        const s = instances.length === 1 ? "" : "s"
+        UI.message(`${instances.length} symbol${s} renamed`)
+    }
+}
+
+function getNameFromTemplate(name) {
+    const phrases = name.split("/").map(item => item.trim())
+
+    let template = Settings.settingForKey(templateKey)
+    if (template === undefined) {
+        template = "%-1"
+    }
+
+    let positives = template.match(/%[1-9]/g)
+    let negatives = template.match(/%-[1-9]/g)
+    if (positives === null) positives = []
+    if (negatives === null) negatives = []
+
+    const indices = positives
+        .concat(negatives)
+        .map(item => parseInt(item.substring(1)))
+
+    let replacement = template
+    indices.forEach(index => {
+        const phrase =
+            index > 0 ? phrases[index - 1] : phrases[phrases.length + index]
+        const regexp = RegExp(`%${index}`)
+
+        if (phrase != undefined) {
+            replacement = replacement.replace(regexp, phrase)
+        } else {
+            replacement = replacement.replace(regexp, "")
+        }
+    })
+
+    return replacement
 }

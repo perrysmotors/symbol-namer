@@ -38,6 +38,18 @@
       "identifier": "clearDefaults",
       "script": "./symbol-namer.js",
       "handler": "onClearDefaults"
+    },
+    {
+      "name": "Rename Selection Using Template",
+      "identifier": "renameToTemplate",
+      "script": "./symbol-namer.js",
+      "handler": "onRenameToTemplate"
+    },
+    {
+      "name": "Define Template",
+      "identifier": "setTemplate",
+      "script": "./symbol-namer.js",
+      "handler": "onSetTemplate"
     }
   ],
   "menu": {
@@ -50,7 +62,10 @@
       "resetAll",
       "-",
       "setDefault",
-      "clearDefaults"
+      "clearDefaults",
+      "-",
+      "setTemplate",
+      "renameToTemplate"
     ]
   }
 }
