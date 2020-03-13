@@ -2,7 +2,7 @@
   "name": "symbol-namer",
   "description": "A plugin to help you rename symbol instances. Rename symbol instances to their override text values, or set and use a default name.",
   "author": "Giles Perry <giles@gilesperry.info> (http://gilesperry.info/)",
-  "version": "2.0.0",
+  "version": "3.0.0",
   "engines": {
     "sketch": ">=3.0"
   },
