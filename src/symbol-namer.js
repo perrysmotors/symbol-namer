@@ -37,13 +37,9 @@ export function onRenameToOverride() {
     } else {
         let renamedCount = 0
         instances.forEach(layer => {
-            const overrides = layer.overrides.filter(
-                override =>
-                    override.property === "stringValue" && override.editable
-            )
-
-            if (overrides.length > 0) {
-                layer.name = overrides[0].value
+            const overrideText = getOverrideText(layer)
+            if (overrideText != null) {
+                layer.name = overrideText
                 renamedCount++
             }
         })
@@ -60,11 +56,15 @@ export function onRenameToOverride() {
     }
 }
 
-function getTextOverrides(layer) {
-    return layer.overrides.filter(
-        override =>
-            override.property === "stringValue" && override.editable
-    )    
+function getOverrideText(layer) {
+    const overrides = layer.overrides.filter(
+        override => override.property === "stringValue" && override.editable
+    )
+    if (overrides.length > 0) {
+        return overrides[0].value
+    } else {
+        return null
+    }
 }
 
 export function onResetSelection() {
@@ -214,9 +214,7 @@ export function onRenameToTemplate() {
     if (instances.length === 0) {
         UI.message("Select one or more symbols")
     } else {
-        instances.forEach(
-            layer => (layer.name = getNameFromTemplate(layer))
-        )
+        instances.forEach(layer => (layer.name = getNameFromTemplate(layer)))
         const s = instances.length === 1 ? "" : "s"
         UI.message(`${instances.length} symbol${s} renamed`)
     }
@@ -251,20 +249,15 @@ function getNameFromTemplate(layer) {
         )
     })
 
-    const textOverrides = getTextOverrides(layer)
-    let overrideText
-    if (textOverrides.length > 0) {
-        overrideText = textOverrides[0].value
-    }
-
+    const overrideText = getOverrideText(layer)
     overrides.forEach(() => {
         replacement = replacement.replace(
             "%O",
-            overrideText != undefined ? overrideText : ""
+            overrideText != null ? overrideText : ""
         )
     })
 
-    return replacement
+    return replacement.trim()
 }
 
 function getMatches(template, regexp) {
