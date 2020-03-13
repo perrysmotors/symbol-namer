@@ -3,6 +3,7 @@ import Settings from "sketch/settings"
 import { getSelectedDocument } from "sketch/dom"
 
 const settingKey = "com.gilesperry.symbol-namer.name"
+const templateKey = "com.gilesperry.symbol-namer.template"
 
 export function onSelectOnPage() {
     const document = getSelectedDocument()
@@ -36,13 +37,9 @@ export function onRenameToOverride() {
     } else {
         let renamedCount = 0
         instances.forEach(layer => {
-            const overrides = layer.overrides.filter(
-                override =>
-                    override.property === "stringValue" && override.editable
-            )
-
-            if (overrides.length > 0) {
-                layer.name = overrides[0].value
+            const overrideText = getOverrideText(layer)
+            if (overrideText != null) {
+                layer.name = overrideText
                 renamedCount++
             }
         })
@@ -56,6 +53,17 @@ export function onRenameToOverride() {
             default:
                 UI.message(`${renamedCount} symbols renamed`)
         }
+    }
+}
+
+function getOverrideText(layer) {
+    const overrides = layer.overrides.filter(
+        override => override.property === "stringValue" && override.editable
+    )
+    if (overrides.length > 0) {
+        return overrides[0].value
+    } else {
+        return null
     }
 }
 
@@ -168,4 +176,95 @@ function getMasterFromSelection(layers) {
 function getDefaultName(master) {
     const defaultName = Settings.layerSettingForKey(master, settingKey)
     return defaultName === undefined ? master.name : defaultName
+}
+
+export function onSetTemplate() {
+    let template = Settings.settingForKey(templateKey)
+    if (template === undefined) {
+        template = "%-1"
+    }
+    UI.getInputFromUser(
+        "Enter a template:",
+        {
+            initialValue: template,
+        },
+        (err, value) => {
+            if (err) {
+                // most likely the user canceled the input
+                return
+            } else {
+                if (value === "") {
+                    UI.message("⚠️ You can't leave it blank")
+                } else {
+                    Settings.setSettingForKey(templateKey, value)
+                    UI.message(`Template set to "${value}"`)
+                }
+            }
+        }
+    )
+}
+
+export function onRenameToTemplate() {
+    const document = getSelectedDocument()
+
+    const instances = document.selectedLayers.layers.filter(
+        layer => layer.type === "SymbolInstance"
+    )
+
+    if (instances.length === 0) {
+        UI.message("Select one or more symbols")
+    } else {
+        instances.forEach(layer => (layer.name = getNameFromTemplate(layer)))
+        const s = instances.length === 1 ? "" : "s"
+        UI.message(`${instances.length} symbol${s} renamed`)
+    }
+}
+
+function getNameFromTemplate(layer) {
+    const name = layer.master.name
+    const phrases = name.split("/").map(item => item.trim())
+
+    let template = Settings.settingForKey(templateKey)
+    if (template === undefined) {
+        template = "%-1"
+    }
+
+    let positives = getMatches(template, /%[1-9]/g)
+    let negatives = getMatches(template, /%-[1-9]/g)
+    let overrides = getMatches(template, /%O/g)
+
+    const indices = positives
+        .concat(negatives)
+        .map(item => parseInt(item.substring(1)))
+
+    let replacement = template
+    indices.forEach(index => {
+        const phrase =
+            index > 0 ? phrases[index - 1] : phrases[phrases.length + index]
+        const substr = `%${index}`
+
+        replacement = replacement.replace(
+            substr,
+            phrase != undefined ? phrase : ""
+        )
+    })
+
+    const overrideText = getOverrideText(layer)
+    overrides.forEach(() => {
+        replacement = replacement.replace(
+            "%O",
+            overrideText != null ? overrideText : ""
+        )
+    })
+
+    return replacement.trim()
+}
+
+function getMatches(template, regexp) {
+    let matches = template.match(regexp)
+    if (matches === null) {
+        return []
+    } else {
+        return matches
+    }
 }

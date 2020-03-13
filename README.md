@@ -6,6 +6,7 @@ A Sketch plugin to help you rename symbol instances.
 ## Features
 - Rename symbol instances to their override text values
 - ***New in Version 2*** – Set and use a default name
+- ***New in Version 3*** – Templates!
 
 ![symbol namer](https://user-images.githubusercontent.com/12557727/76146764-7e123880-608d-11ea-8022-4f7a5a7dfdeb.gif)
 
@@ -23,6 +24,18 @@ When you create a symbol you might give it a name like `Components/Album/Card/De
 
 - Set the default in the library file to use it across all documents. 
 - Set the default in an individual document to use it in that document only.
+
+## How templates work
+
+The Templates feature lets you define patterns for renaming your symbols. You can refer to each part of the symbol name by its position, either left to right or right to left, and you can also access override text:
+
+- `%1` for first from left, `%2` for second from left, etc.
+- `%-1` for the last entry, `%-2` for the second last entry, etc.
+- `%O` for override text. 
+
+e.g. `%2 %3` maps "Components/Album/Card/Default" to "Album Card"
+
+If you insert a "Save" button using "Button/Large/Primary/Disabled" and a "Cancel" button using "Button/Large/Secondary/Default", then the template `%O %1 - %-1 State` would rename the buttons to "Save Button - Disabled State" and "Cancel Button - Default State".
 
 ## Installation
 
