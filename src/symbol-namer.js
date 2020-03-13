@@ -60,6 +60,13 @@ export function onRenameToOverride() {
     }
 }
 
+function getTextOverrides(layer) {
+    return layer.overrides.filter(
+        override =>
+            override.property === "stringValue" && override.editable
+    )    
+}
+
 export function onResetSelection() {
     const document = getSelectedDocument()
 
@@ -208,14 +215,15 @@ export function onRenameToTemplate() {
         UI.message("Select one or more symbols")
     } else {
         instances.forEach(
-            layer => (layer.name = getNameFromTemplate(layer.master.name))
+            layer => (layer.name = getNameFromTemplate(layer))
         )
         const s = instances.length === 1 ? "" : "s"
         UI.message(`${instances.length} symbol${s} renamed`)
     }
 }
 
-function getNameFromTemplate(name) {
+function getNameFromTemplate(layer) {
+    const name = layer.master.name
     const phrases = name.split("/").map(item => item.trim())
 
     let template = Settings.settingForKey(templateKey)
@@ -223,10 +231,9 @@ function getNameFromTemplate(name) {
         template = "%-1"
     }
 
-    let positives = template.match(/%[1-9]/g)
-    let negatives = template.match(/%-[1-9]/g)
-    if (positives === null) positives = []
-    if (negatives === null) negatives = []
+    let positives = getMatches(template, /%[1-9]/g)
+    let negatives = getMatches(template, /%-[1-9]/g)
+    let overrides = getMatches(template, /%O/g)
 
     const indices = positives
         .concat(negatives)
@@ -236,14 +243,35 @@ function getNameFromTemplate(name) {
     indices.forEach(index => {
         const phrase =
             index > 0 ? phrases[index - 1] : phrases[phrases.length + index]
-        const regexp = RegExp(`%${index}`)
+        const substr = `%${index}`
 
-        if (phrase != undefined) {
-            replacement = replacement.replace(regexp, phrase)
-        } else {
-            replacement = replacement.replace(regexp, "")
-        }
+        replacement = replacement.replace(
+            substr,
+            phrase != undefined ? phrase : ""
+        )
+    })
+
+    const textOverrides = getTextOverrides(layer)
+    let overrideText
+    if (textOverrides.length > 0) {
+        overrideText = textOverrides[0].value
+    }
+
+    overrides.forEach(() => {
+        replacement = replacement.replace(
+            "%O",
+            overrideText != undefined ? overrideText : ""
+        )
     })
 
     return replacement
+}
+
+function getMatches(template, regexp) {
+    let matches = template.match(regexp)
+    if (matches === null) {
+        return []
+    } else {
+        return matches
+    }
 }
