@@ -5,6 +5,7 @@ import { getSelectedDocument } from "sketch/dom"
 const settingKey = "com.gilesperry.symbol-namer.name"
 const templateKey = "com.gilesperry.symbol-namer.template"
 
+// Select All Instances on Page
 export function onSelectOnPage() {
     const document = getSelectedDocument()
     const master = getMasterFromSelection(document.selectedLayers.layers)
@@ -25,6 +26,7 @@ export function onSelectOnPage() {
     }
 }
 
+// Rename Selection Using Override Text
 export function onRenameToOverride() {
     const document = getSelectedDocument()
 
@@ -67,6 +69,7 @@ function getOverrideText(layer) {
     }
 }
 
+// Rename Selection Using Default
 export function onResetSelection() {
     const document = getSelectedDocument()
 
@@ -83,6 +86,7 @@ export function onResetSelection() {
     }
 }
 
+// Rename All Instances Using Default
 export function onResetAll() {
     const document = getSelectedDocument()
     const master = getMasterFromSelection(document.selectedLayers.layers)
@@ -101,6 +105,7 @@ export function onResetAll() {
     }
 }
 
+// Set Default Symbol Name
 export function onSetDefault() {
     const document = getSelectedDocument()
     const master = getMasterFromSelection(document.selectedLayers.layers)
@@ -134,6 +139,7 @@ export function onSetDefault() {
     }
 }
 
+// Clear Default Symbol Names
 export function onClearDefaults() {
     const document = getSelectedDocument()
 
@@ -178,6 +184,7 @@ function getDefaultName(master) {
     return defaultName === undefined ? master.name : defaultName
 }
 
+// Define Template
 export function onSetTemplate() {
     let template = Settings.settingForKey(templateKey)
     if (template === undefined) {
@@ -204,6 +211,7 @@ export function onSetTemplate() {
     )
 }
 
+// Rename Selection Using Template
 export function onRenameToTemplate() {
     const document = getSelectedDocument()
 
