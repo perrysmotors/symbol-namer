@@ -229,16 +229,18 @@ export function onRenameToTemplate() {
     if (instances.length === 0) {
         UI.message("Select one or more symbols")
     } else {
-        instances.forEach(layer => (layer.name = getNameFromTemplate(layer)))
+        const template = getTemplateFromSettings()
+        instances.forEach(
+            layer => (layer.name = getNameFromTemplate(layer, template))
+        )
         const s = instances.length === 1 ? "" : "s"
         UI.message(`${instances.length} symbol${s} renamed`)
     }
 }
 
-function getNameFromTemplate(layer) {
+function getNameFromTemplate(layer, template) {
     const name = layer.master.name
     const phrases = name.split("/").map(item => item.trim())
-    const template = getTemplateFromSettings()
 
     let positives = getMatches(template, /%[1-9]/g)
     let negatives = getMatches(template, /%-[1-9]/g)
