@@ -80,7 +80,10 @@ export function onResetSelection() {
     if (instances.length === 0) {
         UI.message("Select one or more symbols")
     } else {
-        instances.forEach(layer => (layer.name = getDefaultName(layer.master)))
+        instances.forEach(layer => {
+            const template = getDefaultName(layer.master)
+            layer.name = getNameFromTemplate(layer, template)
+        })
         const s = instances.length === 1 ? "" : "s"
         UI.message(`${instances.length} symbol${s} renamed`)
     }
@@ -93,10 +96,10 @@ export function onResetAll() {
     if (master === undefined) {
         return
     } else {
-        const name = getDefaultName(master)
+        const template = getDefaultName(master)
         const instances = master.getAllInstances()
         if (instances.length > 0) {
-            instances.forEach(item => (item.name = name))
+            instances.forEach(layer => (layer.name = getNameFromTemplate(layer, template)))
             const s = instances.length === 1 ? "" : "s"
             UI.message(`${instances.length} symbol${s} renamed`)
         } else {
