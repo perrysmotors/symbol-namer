@@ -5,6 +5,7 @@ import { getSelectedDocument } from "sketch/dom"
 const settingKey = "com.gilesperry.symbol-namer.name"
 const templateKey = "com.gilesperry.symbol-namer.template"
 
+// Select All Instances on Page
 export function onSelectOnPage() {
     const document = getSelectedDocument()
     const master = getMasterFromSelection(document.selectedLayers.layers)
@@ -25,6 +26,7 @@ export function onSelectOnPage() {
     }
 }
 
+// Rename Selection Using Override Text
 export function onRenameToOverride() {
     const document = getSelectedDocument()
 
@@ -67,6 +69,7 @@ function getOverrideText(layer) {
     }
 }
 
+// Rename Selection Using Default
 export function onResetSelection() {
     const document = getSelectedDocument()
 
@@ -77,22 +80,26 @@ export function onResetSelection() {
     if (instances.length === 0) {
         UI.message("Select one or more symbols")
     } else {
-        instances.forEach(layer => (layer.name = getDefaultName(layer.master)))
+        instances.forEach(layer => {
+            const template = getDefaultName(layer.master)
+            layer.name = getNameFromTemplate(layer, template)
+        })
         const s = instances.length === 1 ? "" : "s"
         UI.message(`${instances.length} symbol${s} renamed`)
     }
 }
 
+// Rename All Instances Using Default
 export function onResetAll() {
     const document = getSelectedDocument()
     const master = getMasterFromSelection(document.selectedLayers.layers)
     if (master === undefined) {
         return
     } else {
-        const name = getDefaultName(master)
+        const template = getDefaultName(master)
         const instances = master.getAllInstances()
         if (instances.length > 0) {
-            instances.forEach(item => (item.name = name))
+            instances.forEach(layer => (layer.name = getNameFromTemplate(layer, template)))
             const s = instances.length === 1 ? "" : "s"
             UI.message(`${instances.length} symbol${s} renamed`)
         } else {
@@ -101,6 +108,7 @@ export function onResetAll() {
     }
 }
 
+// Set Default Symbol Name
 export function onSetDefault() {
     const document = getSelectedDocument()
     const master = getMasterFromSelection(document.selectedLayers.layers)
@@ -134,6 +142,7 @@ export function onSetDefault() {
     }
 }
 
+// Clear Default Symbol Names
 export function onClearDefaults() {
     const document = getSelectedDocument()
 
@@ -178,11 +187,10 @@ function getDefaultName(master) {
     return defaultName === undefined ? master.name : defaultName
 }
 
+// Define Template
 export function onSetTemplate() {
-    let template = Settings.settingForKey(templateKey)
-    if (template === undefined) {
-        template = "%-1"
-    }
+    const template = getTemplateFromSettings()
+
     UI.getInputFromUser(
         "Enter a template:",
         {
@@ -204,6 +212,16 @@ export function onSetTemplate() {
     )
 }
 
+function getTemplateFromSettings() {
+    let template = Settings.settingForKey(templateKey)
+    if (template === undefined) {
+        return "%-1" // Default
+    } else {
+        return template
+    }
+}
+
+// Rename Selection Using Template
 export function onRenameToTemplate() {
     const document = getSelectedDocument()
 
@@ -214,20 +232,18 @@ export function onRenameToTemplate() {
     if (instances.length === 0) {
         UI.message("Select one or more symbols")
     } else {
-        instances.forEach(layer => (layer.name = getNameFromTemplate(layer)))
+        const template = getTemplateFromSettings()
+        instances.forEach(
+            layer => (layer.name = getNameFromTemplate(layer, template))
+        )
         const s = instances.length === 1 ? "" : "s"
         UI.message(`${instances.length} symbol${s} renamed`)
     }
 }
 
-function getNameFromTemplate(layer) {
+function getNameFromTemplate(layer, template) {
     const name = layer.master.name
     const phrases = name.split("/").map(item => item.trim())
-
-    let template = Settings.settingForKey(templateKey)
-    if (template === undefined) {
-        template = "%-1"
-    }
 
     let positives = getMatches(template, /%[1-9]/g)
     let negatives = getMatches(template, /%-[1-9]/g)

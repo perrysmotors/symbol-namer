@@ -37,6 +37,10 @@ e.g. `%2 %3` maps "Components/Album/Card/Default" to "Album Card"
 
 If you insert a "Save" button using "Button/Large/Primary/Disabled" and a "Cancel" button using "Button/Large/Secondary/Default", then the template `%O %1 - %-1 State` would rename the buttons to "Save Button - Disabled State" and "Cancel Button - Default State".
 
+Define a global template using `Define Template`. Apply the global template using `Rename Selection Using Template`.
+
+Templates can also be used in `Set Default Symbol Name` to save a default pattern for renaming a specific symbol.
+
 ## Installation
 
 * [Download](../../releases/latest/download/symbol-namer.sketchplugin.zip) the latest release of the plugin
