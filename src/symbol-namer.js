@@ -186,10 +186,8 @@ function getDefaultName(master) {
 
 // Define Template
 export function onSetTemplate() {
-    let template = Settings.settingForKey(templateKey)
-    if (template === undefined) {
-        template = "%-1"
-    }
+    const template = getTemplateFromSettings()
+
     UI.getInputFromUser(
         "Enter a template:",
         {
@@ -209,6 +207,15 @@ export function onSetTemplate() {
             }
         }
     )
+}
+
+function getTemplateFromSettings() {
+    let template = Settings.settingForKey(templateKey)
+    if (template === undefined) {
+        return "%-1" // Default
+    } else {
+        return template
+    }
 }
 
 // Rename Selection Using Template
@@ -231,11 +238,7 @@ export function onRenameToTemplate() {
 function getNameFromTemplate(layer) {
     const name = layer.master.name
     const phrases = name.split("/").map(item => item.trim())
-
-    let template = Settings.settingForKey(templateKey)
-    if (template === undefined) {
-        template = "%-1"
-    }
+    const template = getTemplateFromSettings()
 
     let positives = getMatches(template, /%[1-9]/g)
     let negatives = getMatches(template, /%-[1-9]/g)
